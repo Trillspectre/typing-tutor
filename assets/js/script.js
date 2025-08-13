@@ -1,3 +1,22 @@
+function highlightTypedWords(userInput, sampleText) {
+	const userWords = userInput.trim().length > 0 ? userInput.trim().split(/\s+/) : [];
+	const sampleWords = sampleText.trim().split(/\s+/);
+	let highlighted = '';
+	for (let i = 0; i < sampleWords.length; i++) {
+		let word = sampleWords[i];
+		if (userWords[i] !== undefined && userWords[i].length > 0) {
+			if (userWords[i] === word) {
+				highlighted += `<span style=\"color: #0d6efd; font-weight: bold;\">${word}</span>`;
+			} else {
+				highlighted += `<span style=\"color: #dc3545; font-weight: bold;\">${word}</span>`;
+			}
+		} else {
+			highlighted += word;
+		}
+		if (i < sampleWords.length - 1) highlighted += ' ';
+	}
+	return highlighted;
+}
 function calculateCorrectWords(userInput, sampleText) {
 	const userWords = userInput.trim().split(/\s+/);
 	const sampleWords = sampleText.trim().split(/\s+/);
@@ -124,6 +143,48 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Disable typing input by default
 	const typingInput = document.getElementById('typingInput');
 	if (typingInput) typingInput.disabled = true;
+
+		// Instructions modal logic
+		const instructionsBtn = document.getElementById('instructionsBtn');
+		if (instructionsBtn) {
+			instructionsBtn.addEventListener('click', function() {
+				const modal = new bootstrap.Modal(document.getElementById('instructionsModal'));
+				modal.show();
+			});
+		}
+
+		// Add a display area for highlighted text above the input box
+		const sampleTextP = document.getElementById('sampleText');
+		let highlightDisplay = document.getElementById('highlightedSampleText');
+		if (!highlightDisplay && sampleTextP) {
+			highlightDisplay = document.createElement('div');
+			highlightDisplay.id = 'highlightedSampleText';
+			highlightDisplay.style.marginTop = '0.5rem';
+			highlightDisplay.style.minHeight = '1.5em';
+			sampleTextP.parentNode.insertBefore(highlightDisplay, sampleTextP.nextSibling);
+		}
+
+		function updateHighlight() {
+			const userInput = typingInput ? typingInput.value : '';
+			const sampleText = sampleTextP ? sampleTextP.textContent : '';
+			if (highlightDisplay) {
+				highlightDisplay.innerHTML = highlightTypedWords(userInput, sampleText);
+			}
+		}
+
+		if (typingInput) {
+			typingInput.addEventListener('input', updateHighlight);
+		}
+
+		// Update highlight when sample text changes or test is reset
+		const observer = new MutationObserver(updateHighlight);
+		if (sampleTextP) {
+			observer.observe(sampleTextP, { childList: true });
+		}
+		if (typingInput) {
+			typingInput.addEventListener('focus', updateHighlight);
+		}
+		updateHighlight();
 
 		// Stop test with Enter/Return key in typing input
 		if (typingInput) {

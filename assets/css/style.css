@@ -1,0 +1,93 @@
+/* Hide the plain sample text (used for logic only) */
+#sampleText {
+	display: none;
+}
+/* Orange glow for results card */
+#results-area .card {
+	box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.3), 0 2px 8px rgba(0,0,0,0.08);
+	border: 2px solid #ff9800;
+	transition: box-shadow 0.2s, border 0.2s;
+}
+/* Center header title */
+header .text-center h1 {
+	text-align: center;
+}
+
+/* Center instructions button below header */
+header .d-flex.justify-content-center {
+	justify-content: center !important;
+}
+
+@media (max-width: 575.98px) {
+	header .text-center h1 {
+		font-size: 1.5rem;
+	}
+	#highlightedSampleText {
+		font-size: 1rem;
+	}
+	header .d-flex.justify-content-center {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+}
+/* Make header orange */
+header.bg-light {
+	background-color: orange !important;
+	border-bottom: 3px solid #ff9800 !important;
+}
+
+/* Responsive padding and spacing */
+body {
+	font-family: 'Noto Sans', 'Rubik', Arial, sans-serif;
+	background: #f8f9fa;
+}
+
+main.container {
+	max-width: 900px;
+	margin: 0 auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+@media (max-width: 767.98px) {
+	main.container {
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+	}
+	.card {
+		margin-bottom: 1rem;
+	}
+	.d-flex.gap-2 > * {
+		flex: 1 1 100%;
+		min-width: 0;
+	}
+}
+
+@media (min-width: 768px) {
+	.row.g-4 > section, .row.g-4 > aside {
+		margin-bottom: 0;
+	}
+}
+
+/* Highlighted sample text area */
+#highlightedSampleText {
+	font-size: 1.15rem;
+	font-family: 'Noto Sans', sans-serif;
+	word-break: break-word;
+	margin-bottom: 0.5rem;
+	min-height: 1.5em;
+}
+
+/* Responsive buttons */
+.mb-4.d-flex.gap-2 > button {
+	min-width: 90px;
+}
+
+@media (max-width: 575.98px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+	#highlightedSampleText {
+		font-size: 1rem;
+	}
+}

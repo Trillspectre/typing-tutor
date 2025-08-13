@@ -14,12 +14,45 @@
 <body>
     <!-- Header Area -->
     <header class="container-fluid py-3 bg-light border-bottom mb-4">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="text-center">
             <h1 class="m-0 fw-bold" style="font-family: 'Rubik', 'Noto Sans', sans-serif; letter-spacing: 1px;">TypeRacer</h1>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
             <button id="instructionsBtn" class="btn btn-outline-primary d-flex align-items-center" type="button">
                 <i class="fas fa-info-circle me-2"></i>
                 Instructions
             </button>
+        </div>
+
+        <!-- Instructions Modal -->
+        <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="instructionsModalLabel">How to Take the Typing Test</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ol class="mb-3">
+                            <li><strong>Select a Difficulty:</strong> Choose Easy, Medium, or Hard from the dropdown menu.</li>
+                            <li><strong>Read the Sample Text:</strong> A random text will appear for you to type. The words will be highlighted as you type: <span style="color:#0d6efd;font-weight:bold;">blue</span> for correct, <span style="color:#dc3545;font-weight:bold;">red</span> for incorrect.</li>
+                            <li><strong>Start the Test:</strong> Click the <b>Start</b> button, or press <kbd>Space</kbd> or <kbd>Tab</kbd> (unless your cursor is in the typing box).</li>
+                            <li><strong>Type the Text:</strong> Enter the sample text in the input area. Only type while the test is running.</li>
+                            <li><strong>Stop the Test:</strong> Click the <b>Stop</b> button, or press <kbd>Enter</kbd> while in the typing box, when you finish typing.</li>
+                            <li><strong>View Results:</strong> Your time, WPM (words per minute), and level will be shown in the results area.</li>
+                            <li><strong>Retry:</strong> Click <b>Retry</b> to try again with a new random text.</li>
+                        </ol>
+                        <ul>
+                            <li>Only words that exactly match the sample text are counted as correct.</li>
+                            <li>WPM is calculated based on the number of correct words and your time.</li>
+                            <li>The test area and results are fully responsive for all devices.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -44,7 +77,7 @@
                     <div class="card shadow-sm">
                         <div class="card-body">
                             <p id="sampleText" class="mb-0" style="font-size: 1.15rem; font-family: 'Noto Sans', sans-serif;">
-                                The quick brown fox jumps over the lazy dog.
+                               
                             </p>
                         </div>
                     </div>
