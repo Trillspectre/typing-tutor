@@ -1,3 +1,23 @@
+function getBestWpm(level) {
+	if (!level) return '-';
+	const best = localStorage.getItem('bestWpm_' + level);
+	return best ? best : '-';
+}
+
+function setBestWpm(level, wpm) {
+	if (!level || !wpm || isNaN(wpm)) return false;
+	const currentBest = parseInt(localStorage.getItem('bestWpm_' + level) || '0', 10);
+	if (wpm > currentBest) {
+		localStorage.setItem('bestWpm_' + level, wpm);
+		return true; // New high score
+	}
+	return false;
+}
+
+function displayBestWpm(level) {
+	const bestWpmSpan = document.getElementById('resultBestWpm');
+	if (bestWpmSpan) bestWpmSpan.textContent = getBestWpm(level);
+}
 function highlightTypedWords(userInput, sampleText) {
 	const userWords = userInput.trim().length > 0 ? userInput.trim().split(/\s+/) : [];
 	const sampleWords = sampleText.trim().split(/\s+/);
@@ -78,6 +98,18 @@ function stopTest() {
 		const wpm = minutes > 0 ? Math.round(correctWords / minutes) : 0;
 		displayWpm(wpm);
 		typingInput.disabled = true;
+		// Store and display best WPM for this level
+		const isNewHigh = setBestWpm(difficulty, wpm);
+		displayBestWpm(difficulty);
+		// Show congrats message if new high score
+		const congrats = document.getElementById('bestWpmCongrats');
+		if (congrats) {
+			if (isNewHigh) {
+				congrats.style.display = '';
+			} else {
+				congrats.style.display = 'none';
+			}
+		}
 	}
 }
 
@@ -94,6 +126,9 @@ function displayTestTime(timeStr) {
 }
 
 function resetTest() {
+	// Hide congrats message
+	const congrats = document.getElementById('bestWpmCongrats');
+	if (congrats) congrats.style.display = 'none';
 	testStartTime = null;
 	testEndTime = null;
 	setButtonStates({start: false, stop: true});
@@ -107,6 +142,9 @@ function resetTest() {
 	}
 	// Clear level display
 	displayLevel('-');
+	// Clear best WPM display
+	const difficulty = document.getElementById('difficultySelect').value;
+	displayBestWpm(difficulty);
 }
 // Typing test sample texts by difficulty
 const sampleTexts = {
@@ -140,6 +178,17 @@ function updateSampleText() {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
+	// Set initial level display
+	const difficultySelect = document.getElementById('difficultySelect');
+	displayLevel(difficultySelect ? difficultySelect.value : '-');
+	// Show best WPM for initial level
+	displayBestWpm(difficultySelect ? difficultySelect.value : '-');
+	// Update best WPM display when difficulty changes
+	if (difficultySelect) {
+		difficultySelect.addEventListener('change', function() {
+			displayBestWpm(difficultySelect.value);
+		});
+	}
 	// Disable typing input by default
 	const typingInput = document.getElementById('typingInput');
 	if (typingInput) typingInput.disabled = true;
@@ -205,11 +254,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				startTest();
 			}
 		});
-	// Set initial level display
-	displayLevel(document.getElementById('difficultySelect').value);
-	const difficultySelect = document.getElementById('difficultySelect');
 	if (difficultySelect) {
-		difficultySelect.addEventListener('change', updateSampleText);
+		difficultySelect.addEventListener('change', function() {
+			updateSampleText();
+			// Clear typing input when difficulty changes
+			const typingInput = document.getElementById('typingInput');
+			if (typingInput) typingInput.value = '';
+		});
 		// Set initial text
 		updateSampleText();
 	}
